@@ -1,3 +1,10 @@
+#Install INLA
+#install.packages("INLA",repos=c(getOption("repos"),INLA="https://inla.r-inla-download.org/R/testing"), dep=TRUE)
+
+#Install INLAjoint
+#library(devtools)
+#devtools::install_github('DenisRustand/INLAjoint', build_vignettes = TRUE)
+
 library(INLA)
 library(INLAjoint)
 library(ggplot2)
@@ -28,13 +35,14 @@ summary(M1.wei)
 M1.exp_2 <- joint(formSurv = inla.surv(years, death) ~ drug + sex,
                   dataSurv = SurvData, basRisk="exponentialsurv")
 summary(M1.exp_2)
+
 summary(M1.exp_2, hr=TRUE) # hazard ratios instead of betas
 
 # Model 2 - Weibull baseline risk
 M1.wei_2 <- joint(formSurv = inla.surv(years, death) ~ drug + sex,
                   dataSurv = SurvData, basRisk="weibullsurv")
 summary(M1.wei_2) # shape = 1 => exponential
-plot(M1.wei_2)
+
 # for weibull variants, see: inla.doc("weibullsurv")
 # variant=0 is the commonly used weibull survival model
 # variant=1 is a more stable, slightly differently parametrized but equivalent version
@@ -84,6 +92,8 @@ M2 <- joint(formSurv = list(inla.surv(years, death) ~ drug + sex,
 summary(M2)
 summary(M2, hr=T)
 plot(M2)
+
+#Prediction
 NewData2 <- SurvData2[c(2,3,5,14),]
 NewData2$years <- 0
 NewData2$death <- NewData2$trans <- 0
@@ -149,11 +159,6 @@ M6 <- joint(formSurv = list(inla.surv(time = years, event = death)  ~ sex + drug
             basRisk = c("rw1", "rw1"), assoc = c("SRE", "SRE_ind"), control=list(int.strategy="eb", safemode=F))
 summary(M6)
 
-
-
-
-
-
 # Model 8 - Bivariate joint model with competing risks
 M8 <- joint(formLong = list(serBilir ~ year * drug + sex + (1|id),
                             platelets ~ year + f1(year) + drug + sex + (1|id)),
@@ -169,6 +174,7 @@ summary(M8)
 
 
 # Model 9 - Multivariate joint model
+#Takes around 20 minutes
 Nsplines <- ns(Longi$year, knots=c(1,4))
 f1 <- function(x) predict(Nsplines, x)[,1]
 f2 <- function(x) predict(Nsplines, x)[,2]
@@ -190,6 +196,8 @@ M16 <-joint(formSurv = list(inla.surv(time = years, event = death) ~ drug,
                                                                    c("CV", ""), c("CV", "CV"), c("CV", "CV"), c("CV", "")),
             control=list(int.strategy="eb"))
 summary(M16)
+
+plot(M16)
 
 
 #Extra examples

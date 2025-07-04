@@ -174,7 +174,7 @@ summary(M8)
 
 
 # Model 9 - Multivariate joint model
-#Takes around 20 minutes
+#Takes around 24 minutes
 Nsplines <- ns(Longi$year, knots=c(1,4))
 f1 <- function(x) predict(Nsplines, x)[,1]
 f2 <- function(x) predict(Nsplines, x)[,2]

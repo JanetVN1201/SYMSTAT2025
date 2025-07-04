@@ -64,20 +64,20 @@ str(P)
 P1 <- P$PredS[P$PredS$id==1,]
 P2 <- P$PredS[P$PredS$id==3,]
 # plot hazard conditional on sex
-plot(P1$time, P1$Haz_quant0.5, type="l", ylim=c(0, 0.4), main="Hazard")
-lines(P1$time, P1$Haz_quant0.025, type="l", lty=2)
-lines(P1$time, P1$Haz_quant0.975, type="l", lty=2)
-lines(P2$time, P2$Haz_quant0.5, col=2)
-lines(P2$time, P2$Haz_quant0.025, col=2, lty=2)
-lines(P2$time, P2$Haz_quant0.975, col=2, lty=2)
+plot(P1$years, P1$Haz_quant0.5, type="l", ylim=c(0, 0.4), main="Hazard")
+lines(P1$years, P1$Haz_quant0.025, type="l", lty=2)
+lines(P1$years, P1$Haz_quant0.975, type="l", lty=2)
+lines(P2$years, P2$Haz_quant0.5, col=2)
+lines(P2$years, P2$Haz_quant0.025, col=2, lty=2)
+lines(P2$years, P2$Haz_quant0.975, col=2, lty=2)
 legend("topleft", c("Female", "Male"), lty=c(1,1), col=c(1,2))
 # plot survival conditional on sex
-plot(P1$time, P1$Surv_quant0.5, type="l", ylim=c(0,1), main="Survival probabilities")
-lines(P1$time, P1$Surv_quant0.025, type="l", lty=2)
-lines(P1$time, P1$Surv_quant0.975, type="l", lty=2)
-lines(P2$time, P2$Surv_quant0.5, col=2)
-lines(P2$time, P2$Surv_quant0.025, col=2, lty=2)
-lines(P2$time, P2$Surv_quant0.975, col=2, lty=2)
+plot(P1$years, P1$Surv_quant0.5, type="l", ylim=c(0,1), main="Survival probabilities")
+lines(P1$years, P1$Surv_quant0.025, type="l", lty=2)
+lines(P1$years, P1$Surv_quant0.975, type="l", lty=2)
+lines(P2$years, P2$Surv_quant0.5, col=2)
+lines(P2$years, P2$Surv_quant0.025, col=2, lty=2)
+lines(P2$years, P2$Surv_quant0.975, col=2, lty=2)
 legend("topright", c("Female", "Male"), lty=c(1,1), col=c(1,2))
 summary(SurvData) # more data om females => less uncertainty
 
@@ -102,10 +102,10 @@ NewData2
 
 P2 <- predict(M2, NewData2, horizon=14, CIF=TRUE, id="id")
 # CIF is preferred because it accounts for other competing events
-ggplot(P2$PredS, aes(x=time, y=CIF_quant0.5, group=id)) +
+ggplot(P2$PredS, aes(x=years, y=CIF_quant0.5, group=id)) +
   geom_line(aes(color=id)) +
-  geom_line(aes(x=time, y=CIF_quant0.025, color=id), linetype="dashed")+
-  geom_line(aes(x=time, y=CIF_quant0.975, color=id), linetype="dashed")+
+  geom_line(aes(x=years, y=CIF_quant0.025, color=id), linetype="dashed")+
+  geom_line(aes(x=years, y=CIF_quant0.975, color=id), linetype="dashed")+
   facet_wrap(~Outcome+id, ncol=4)
 
 # Model 5 - Longitudinal model

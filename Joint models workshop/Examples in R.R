@@ -1,9 +1,9 @@
 #Install INLA
-#install.packages("INLA",repos=c(getOption("repos"),INLA="https://inla.r-inla-download.org/R/testing"), dep=TRUE)
+install.packages("INLA",repos=c(getOption("repos"),INLA="https://inla.r-inla-download.org/R/testing"), dep=TRUE)
 
 #Install INLAjoint
-#library(devtools)
-#devtools::install_github('DenisRustand/INLAjoint', build_vignettes = TRUE)
+library(devtools)
+devtools::install_github('DenisRustand/INLAjoint', build_vignettes = TRUE)
 
 library(INLA)
 library(INLAjoint)
@@ -54,6 +54,7 @@ M1_3 <- joint(formSurv = inla.surv(years, death) ~ drug + sex,
               dataSurv = SurvData, basRisk="rw2", NbasRisk = 30)
 summary(M1_3, hr=T)
 plot(M1_3) # posterior marginals and baseline risk
+
 
 NewData <- SurvData[c(1,3),]
 NewData$years=0
@@ -198,6 +199,10 @@ M16 <-joint(formSurv = list(inla.surv(time = years, event = death) ~ drug,
 summary(M16)
 
 plot(M16)
+
+#Likelihood
+names(inla.models()$likelihood)
+
 
 
 #Extra examples
